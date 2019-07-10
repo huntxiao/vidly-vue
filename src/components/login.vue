@@ -62,9 +62,17 @@ export default {
         this.emailIsValid = true;
         this.emailValidMsg = "Email can not be null";
       }
+      if (this.email.length > 0 && this.email.length < 8) {
+        this.emailIsValid = true;
+        this.emailValidMsg = "Email can not be less than 8 characters";
+      }
       if (this.password.length === 0) {
         this.passwordIsValid = true;
-        this.passwordIsValid = "Password can not be null";
+        this.passwordValidMsg = "Password can not be null";
+      }
+      if (this.password.length > 0 && this.email.length < 6) {
+        this.passwordIsValid = true;
+        this.passwordValidMsg = "Password can not be less than characters";
       }
     },
     toSignin(event) {

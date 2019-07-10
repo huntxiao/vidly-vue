@@ -4,9 +4,10 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 const state = {
-  count: 0
+    isLogined: false,
+    isSigined: false
 };
 
 export default new Vuex.Store({
-  state
+    state
 });

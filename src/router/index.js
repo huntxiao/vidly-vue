@@ -31,6 +31,8 @@ router.beforeEach((to, from, next) => {
     const isLogin = localStorage.login ? true : false;
     if (to.path === "/login") {
         next();
+    } else if (to.path === "/signin") {
+        next();
     } else {
         //judge if current status is logined or not
         isLogin ? next() : next("/login");
