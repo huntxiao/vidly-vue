@@ -10,7 +10,7 @@
         <input
           v-model="email"
           type="email"
-          :class="[{'is-invalid': emailIsValid},'form-control']"
+          :class="[{'is-invalid': emailIsInvalid},'form-control']"
           id="InputEmail"
           placeholder="Email"
           required
@@ -22,7 +22,7 @@
         <input
           v-model="password"
           type="text"
-          :class="[{'is-invalid': passwordIsValid},'form-control']"
+          :class="[{'is-invalid': passwordIsInvalid},'form-control']"
           id="InputPassword"
           placeholder="Password"
           required
@@ -31,7 +31,7 @@
       </div>
 
       <div class="mt-2 mb-2 text-center">
-        <input type="checkbox" value="remember-me" /> Remember me
+        <input type="checkbox" value="remember-me" v-model="rememberChecked" /> Remember me
       </div>
       <hr />
       <div class="mt-2 mb-2 text-center">
@@ -40,39 +40,67 @@
       <button @click="login" class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
       <p class="mt-5 mb-3 text-muted text-center">&copy;Copyrights for Hunt 2019-2020</p>
     </form>
+    <loading-mask v-show="loading"></loading-mask>
   </div>
 </template>
 <script>
+import axios from "axios";
+import LoadingMask from "@/components/loading-mask";
 export default {
   name: "Login",
+  components: {
+    LoadingMask
+  },
   data() {
     return {
       email: "",
       password: "",
       error: "",
-      emailIsValid: false,
-      passwordIsValid: false,
+      emailIsInvalid: false,
+      passwordIsInvalid: false,
       emailValidMsg: "",
-      passwordValidMsg: ""
+      passwordValidMsg: "",
+      rememberChecked: "",
+      loading: false
     };
+  },
+  computed: {
+    validated() {
+      return !(this.emailIsInvalid && this.passwordIsInvalid);
+    }
   },
   methods: {
     login() {
       if (this.email.length === 0) {
-        this.emailIsValid = true;
+        this.emailIsInvalid = true;
         this.emailValidMsg = "Email can not be null";
-      }
-      if (this.email.length > 0 && this.email.length < 8) {
-        this.emailIsValid = true;
+      } else if (this.email.length > 0 && this.email.length < 8) {
+        this.emailIsInvalid = true;
         this.emailValidMsg = "Email can not be less than 8 characters";
       }
       if (this.password.length === 0) {
-        this.passwordIsValid = true;
+        this.passwordIsInvalid = true;
         this.passwordValidMsg = "Password can not be null";
-      }
-      if (this.password.length > 0 && this.email.length < 6) {
-        this.passwordIsValid = true;
+      } else if (this.password.length > 0 && this.email.length < 6) {
+        this.passwordIsInvalid = true;
         this.passwordValidMsg = "Password can not be less than characters";
+      }
+      console.log(this.validated);
+      //I found a api for test
+      //https://malun666.github.io/aicoder_vip_doc/#/pages/vueproapi/vue_api
+      if (this.validated === true) {
+        this.loading = true;
+        axios
+          .post("/login", {
+            email: this.email,
+            password: this.password
+          })
+          .then(res => {
+            console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
+          });
       }
     },
     toSignin(event) {
@@ -81,8 +109,7 @@ export default {
     }
   },
   created() {},
-  mounted() {},
-  computed: {}
+  mounted() {}
 };
 </script>
 
