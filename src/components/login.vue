@@ -15,7 +15,7 @@
           placeholder="Email"
           required
         />
-        <div class="invalid-feedback">{{emailValidMsg}}</div>
+        <div class="invalid-feedback">{{emailInValidMsg}}</div>
       </div>
       <div class="form-group">
         <label for="formGroupExampleInput2">Password</label>
@@ -27,7 +27,7 @@
           placeholder="Password"
           required
         />
-        <div class="invalid-feedback">{{passwordValidMsg}}</div>
+        <div class="invalid-feedback">{{passwordInValidMsg}}</div>
       </div>
 
       <div class="mt-2 mb-2 text-center">
@@ -44,7 +44,6 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 import LoadingMask from "@/components/loading-mask";
 export default {
   name: "Login",
@@ -58,8 +57,8 @@ export default {
       error: "",
       emailIsInvalid: false,
       passwordIsInvalid: false,
-      emailValidMsg: "",
-      passwordValidMsg: "",
+      emailInValidMsg: "",
+      passwordInValidMsg: "",
       rememberChecked: "",
       loading: false
     };
@@ -73,24 +72,25 @@ export default {
     login() {
       if (this.email.length === 0) {
         this.emailIsInvalid = true;
-        this.emailValidMsg = "Email can not be null";
+        this.emailInValidMsg = "Email can not be null";
       } else if (this.email.length > 0 && this.email.length < 8) {
         this.emailIsInvalid = true;
-        this.emailValidMsg = "Email can not be less than 8 characters";
+        this.emailInValidMsg = "Email can not be less than 8 characters";
       }
       if (this.password.length === 0) {
         this.passwordIsInvalid = true;
-        this.passwordValidMsg = "Password can not be null";
+        this.passwordInValidMsg = "Password can not be null";
       } else if (this.password.length > 0 && this.email.length < 6) {
         this.passwordIsInvalid = true;
-        this.passwordValidMsg = "Password can not be less than characters";
+        this.passwordInValidMsg = "Password can not be less than characters";
       }
       console.log(this.validated);
       //I found a api for test
       //https://malun666.github.io/aicoder_vip_doc/#/pages/vueproapi/vue_api
       if (this.validated === true) {
         this.loading = true;
-        axios
+        // https://blog.csdn.net/fxs12138/article/details/84970418
+        this.$http
           .post("/login", {
             email: this.email,
             password: this.password
